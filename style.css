@@ -1,0 +1,249 @@
+/* Using the tokens from theme.css */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-on-background);
+    font-family: var(--typography-body-medium-font-family), sans-serif;
+    font-size: var(--typography-body-medium-font-size);
+    font-weight: var(--typography-body-medium-font-weight);
+    line-height: var(--typography-body-medium-line-height);
+    min-height: 100vh;
+    display: flex;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#theme-toggle {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    background: var(--color-surface-container-high);
+    color: var(--color-on-surface);
+    border: 1px solid var(--color-outline);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+#theme-toggle:hover {
+    background: var(--color-primary-container);
+    color: var(--color-on-primary-container);
+    transform: scale(1.05);
+}
+
+.login-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.login-form-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.brand-logo {
+    margin-bottom: 4rem;
+}
+
+.logo-text {
+    font-family: var(--typography-headline-large-font-family);
+    font-size: var(--typography-headline-large-font-size);
+    font-weight: 700;
+    color: var(--color-primary);
+    letter-spacing: -1px;
+}
+
+.form-header {
+    margin-bottom: 2.5rem;
+}
+
+.form-header h1 {
+    font-family: var(--typography-display-small-font-family);
+    font-size: var(--typography-display-small-font-size);
+    font-weight: var(--typography-display-small-font-weight);
+    letter-spacing: var(--typography-display-small-letter-spacing);
+    color: var(--color-on-background);
+    margin-bottom: 0.5rem;
+}
+
+.form-header p {
+    color: var(--color-outline);
+    font-size: var(--typography-body-large-font-size);
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-group label {
+    font-family: var(--typography-label-medium-font-family);
+    font-size: var(--typography-label-medium-font-size);
+    font-weight: var(--typography-label-medium-font-weight);
+    color: var(--color-on-surface);
+}
+
+.input-group input {
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--color-outline-variant);
+    background: var(--color-surface-container-lowest);
+    color: var(--color-on-surface);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px var(--color-primary-container);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.remember-me span {
+    font-size: var(--typography-body-small-font-size);
+}
+
+.forgot-password {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--typography-body-small-font-size);
+    transition: color 0.2s ease;
+}
+
+.forgot-password:hover {
+    color: var(--color-on-primary-container);
+    text-decoration: underline;
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    padding: 1.25rem;
+    border-radius: 12px;
+    border: none;
+    font-family: var(--typography-label-large-font-family);
+    font-size: var(--typography-label-large-font-size);
+    font-weight: var(--typography-label-large-font-weight);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    background: var(--color-on-primary-container);
+    color: var(--color-primary); /* Assuming on-primary-container requires primary text based on M3 design */
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.signup-prompt {
+    margin-top: 2rem;
+    text-align: center;
+    color: var(--color-outline);
+}
+
+.signup-prompt a {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.signup-prompt a:hover {
+    text-decoration: underline;
+}
+
+.login-image {
+    flex: 1.2;
+    background-image: url('background.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 40px 0 0 40px;
+    box-shadow: -20px 0 40px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--color-primary) 0%, transparent 100%);
+    opacity: 0.15;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.login-form-wrapper > * {
+    animation: fadeIn 0.6s ease forwards;
+    opacity: 0;
+}
+
+.brand-logo { animation-delay: 0.1s; }
+.form-header { animation-delay: 0.2s; }
+.input-group:nth-child(2) { animation-delay: 0.3s; }
+.input-group:nth-child(3) { animation-delay: 0.4s; }
+.form-actions { animation-delay: 0.5s; }
+.btn-primary { animation-delay: 0.6s; }
+.signup-prompt { animation-delay: 0.7s; }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .login-image {
+        display: none;
+    }
+    
+    .login-form-wrapper {
+        padding: 2rem;
+        width: 100%;
+        max-width: 500px;
+    }
+}
