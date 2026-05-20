@@ -1,0 +1,380 @@
+.page {
+  padding: var(--space-6) 0 var(--space-16);
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-muted);
+  font-weight: 500;
+  margin-bottom: var(--space-6);
+  padding: 0 var(--space-4);
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: var(--color-primary);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: 0 var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .content {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .gallerySection {
+    flex: 1;
+  }
+  .detailsSection {
+    flex: 1;
+    position: sticky;
+    top: var(--space-8);
+  }
+}
+
+.soldOutBadge {
+  display: inline-block;
+  background-color: var(--color-error-container);
+  color: var(--color-on-error-container);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: var(--space-4);
+}
+
+.nameHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-1);
+}
+
+.shareBtn {
+  background: none;
+  border: none;
+  color: var(--color-muted);
+  cursor: pointer;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.shareBtn:hover {
+  color: var(--color-primary);
+  background-color: var(--color-surface-dim);
+}
+
+.name {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.price {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: var(--space-6);
+}
+
+.description {
+  margin-bottom: var(--space-8);
+}
+
+.colorsSection {
+  margin-bottom: var(--space-8);
+}
+
+.colorsSection h3 {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-3);
+  color: var(--color-primary);
+}
+
+.colorOptions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.colorOption {
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.colorOption.selected {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.colorOption:hover:not(.selected) {
+  border-color: var(--color-muted);
+}
+
+/* Shoe size section */
+.sizesSection {
+  margin-top: var(--space-4);
+}
+
+.sizesSection h3 {
+  font-size: var(--text-base);
+  margin-bottom: var(--space-3);
+  color: var(--color-primary);
+}
+
+.sizeOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.sizeOption {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sizeOption:hover:not(.sizeUnavailable):not(.sizeSelected) {
+  border-color: var(--color-primary);
+}
+
+.sizeSelected {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+}
+
+.sizeUnavailable {
+  opacity: 0.35;
+  cursor: pointer; /* still clickable so the hint shows */
+  text-decoration: line-through;
+}
+
+.sizeHint {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-error);
+  font-weight: 500;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+.description h3 {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-2);
+  color: var(--color-primary);
+}
+
+.description p {
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.policySummary {
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-10);
+  padding: var(--space-4);
+  background-color: var(--color-surface-dim);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-accent);
+}
+
+.policyHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.policyIcon {
+  color: var(--color-accent);
+}
+
+.policyHeader h3 {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.policyRules {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.rule {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  line-height: 1.4;
+}
+
+.rule svg {
+  margin-top: 2px;
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+
+.agreementCheckbox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.agreementCheckbox input {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+}
+
+.viewFullPolicies {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.ctaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+.buyNowButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  height: 56px;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.buyNowButton:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.buyNowButton:disabled {
+  background-color: var(--color-muted);
+  color: var(--color-on-primary);
+  cursor: not-allowed;
+}
+
+.addButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  height: 52px;
+  background-color: transparent;
+  color: var(--color-primary);
+  font-size: var(--text-base);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-primary);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.addButton:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.addButton:disabled {
+  border-color: var(--color-muted);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+
+.stateWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--color-surface-dim);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.stateMessage {
+  color: var(--color-muted);
+  margin-bottom: var(--space-4);
+}
+
+.backButton {
+  padding: var(--space-3) var(--space-6);
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  text-decoration: none;
+}

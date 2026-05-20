@@ -1,0 +1,130 @@
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-muted);
+  font-weight: 500;
+  margin-bottom: var(--space-6);
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: var(--color-primary);
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  color: var(--color-primary);
+  margin-bottom: var(--space-8);
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.contactGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  background: var(--color-surface-dim);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+}
+
+.contactItem {
+  flex: 1 1 auto;
+  min-width: 180px;
+}
+
+.contactItem strong {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--color-accent);
+  margin-bottom: 2px;
+}
+
+.contactItem p {
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.icon {
+  color: var(--color-accent);
+}
+
+.sectionHeader h2 {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  color: var(--color-primary);
+}
+
+.content {
+  color: var(--color-primary);
+  line-height: 1.6;
+  font-size: var(--text-base);
+}
+
+.content p {
+  margin-bottom: var(--space-4);
+}
+
+.content ul {
+  list-style: disc;
+  margin-left: var(--space-6);
+  margin-bottom: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.highlight {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--color-error);
+  font-weight: 600;
+  font-style: italic;
+}
+
+.content strong {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.markdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.line {
+  min-height: 1.2em;
+}
+
+.chevron {
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .chevron {
+    display: none;
+  }
+  .sectionHeader {
+    cursor: default !important;
+  }
+}
+

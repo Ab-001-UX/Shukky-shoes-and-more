@@ -1,0 +1,134 @@
+.container {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-6);
+  position: relative;
+  background-color: var(--color-primary);
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Subtle background image effect */
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format&fit=cover');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.4), var(--color-primary));
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.brand {
+  margin-bottom: var(--space-4);
+}
+
+.logo {
+  font-family: var(--font-heading);
+  font-size: 42px;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.tagline {
+  font-size: var(--text-lg);
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-weight: 500;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 500;
+  margin-bottom: var(--space-3);
+}
+
+.subtitle {
+  font-size: var(--text-base);
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.signInBtn {
+  height: 56px;
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-size: var(--text-lg);
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.signInBtn:active {
+  transform: scale(0.98);
+}
+
+.signUpBtn {
+  height: 56px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  font-size: var(--text-lg);
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  transition: background-color 0.2s ease;
+}
+
+.signUpBtn:active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.footer {
+  position: absolute;
+  bottom: var(--space-6);
+  left: 0;
+  right: 0;
+  z-index: 2;
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}

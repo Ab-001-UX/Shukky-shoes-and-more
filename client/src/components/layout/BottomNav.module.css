@@ -1,0 +1,127 @@
+/* Mobile first — base styles */
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(64px + env(safe-area-inset-bottom, 0px));
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 50;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.indicator {
+  position: absolute;
+  height: 85%;
+  background: linear-gradient(
+    135deg, 
+    rgba(255, 255, 255, 0.4), 
+    rgba(255, 255, 255, 0.1)
+  );
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  /* Smooth sliding but with an organic wobble animation */
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: liquidWobble 6s ease-in-out infinite;
+  z-index: 0;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.05),
+    inset 0 0 15px rgba(255, 255, 255, 0.4);
+}
+
+@keyframes liquidWobble {
+  0%, 100% {
+    border-radius: 24px 18px 22px 20px;
+    transform: scale(1);
+  }
+  33% {
+    border-radius: 20px 24px 18px 22px;
+    transform: scale(1.02, 0.98);
+  }
+  66% {
+    border-radius: 22px 20px 24px 18px;
+    transform: scale(0.98, 1.02);
+  }
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--color-muted);
+  width: 100%;
+  height: 100%;
+  padding: 4px 0;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.navItem.active {
+  color: var(--color-primary) !important; /* Sharp black text */
+  transform: translateY(-2px) scale(1.1); /* Magnified lift */
+}
+
+.active .iconWrapper, .active .label {
+  color: var(--color-primary) !important;
+}
+
+.active .iconWrapper svg {
+  color: var(--color-primary) !important;
+  stroke-width: 2.5px; /* Make it look bolder under the lens */
+}
+
+.iconWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background-color: var(--color-error);
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 700;
+  height: 16px;
+  min-width: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+}
+
+.active .badge {
+  border-color: #FFFFFF;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+/* Tablet and Desktop - hide bottom nav */
+@media (min-width: 768px) {
+  .bottomNav {
+    display: none;
+  }
+}

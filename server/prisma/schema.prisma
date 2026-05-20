@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id               String   @id @default(cuid())
+  name             String
+  email            String   @unique
+  password         String
+  role             Role     @default(BUYER)
+  orders           Order[]
+  createdAt        DateTime @default(now())
+}
+
+model Product {
+  id               String        @id @default(cuid())
+  name             String
+  price            Int           // stored in kobo
+  images           String[]
+  colors           String[]
+  tags             String[]
+  availableSizes   String[]      // e.g. ["36","37","40"] — sizes this shoe comes in
+  unavailableSizes String[]      // sizes in availableSizes that are currently out of stock
+  description      String
+  category         Category
+  status           ProductStatus @default(ACTIVE)
+  stock            Int           @default(0)
+  orderItems       OrderItem[]
+  createdAt        DateTime      @default(now())
+}
+
+model Order {
+  id                String            @id @default(cuid())
+  user              User?             @relation(fields: [userId], references: [id])
+  userId            String?
+  items             OrderItem[]
+  totalAmount       Int
+  paymentStatus     PaymentStatus     @default(PENDING)
+  fulfillmentStatus FulfillmentStatus @default(PENDING)
+  flutterwaveTxRef  String
+  deliveryDetails   DeliveryDetails   @relation(fields: [deliveryDetailsId], references: [id])
+  deliveryDetailsId String            @unique
+  createdAt         DateTime          @default(now())
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  color     String?
+  size      String? // shoe size chosen by buyer
+  quantity  Int
+  price     Int     // stored in kobo
+}
+
+model DeliveryDetails {
+  id            String         @id @default(cuid())
+  fullName      String
+  email         String?        // Added for notifications
+  phone         String
+  address       String
+  city          String
+  state         String
+  method        DeliveryMethod @default(RIDER)
+  paymentMethod PaymentMethod  @default(ONLINE)
+  pickupPerson  String?        // SELF, OTHER, RIDER
+  pickerName    String?
+  pickerPhone   String?
+  pickerGender  String?        // MALE, FEMALE, OTHER
+  notes         String?
+  order         Order?
+}
+
+enum DeliveryMethod {
+  IN_PERSON
+  RIDER
+}
+
+enum PaymentMethod {
+  ONLINE
+  ON_DELIVERY
+}
+
+enum Role { 
+  BUYER 
+  ADMIN 
+}
+
+enum ProductStatus { 
+  ACTIVE 
+  OUT_OF_STOCK 
+  ARCHIVED 
+}
+
+enum PaymentStatus { 
+  PENDING 
+  SUCCESS 
+  FAILED 
+}
+
+enum FulfillmentStatus { 
+  PENDING 
+  PROCESSING 
+  SHIPPED 
+  DELIVERED 
+}
+
+enum Category { 
+  SHOES 
+  BAGS 
+}
+
+model Policy {
+  id        String   @id @default(cuid())
+  type      String   @unique // e.g., "DELIVERY", "RETURNS", "GENERAL"
+  content   String   @db.Text
+  updatedAt DateTime @updatedAt
+}

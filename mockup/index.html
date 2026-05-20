@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shukky Shoes & More — Luxury Footwear & Bags</title>
+  <meta name="description" content="Discover premium shoes and bags at Shukky. Curated luxury fashion for the modern woman." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- ANNOUNCEMENT BAR                    -->
+  <!-- ═══════════════════════════════════ -->
+  <div class="announcement-bar" id="announcement-bar">
+    <p>Free delivery on orders above ₦50,000 &nbsp;·&nbsp; New arrivals every Friday</p>
+  </div>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- HEADER / NAVIGATION                 -->
+  <!-- ═══════════════════════════════════ -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <button class="header-icon menu-toggle" id="menu-toggle" aria-label="Open menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <a href="/" class="brand" id="brand-logo">
+        <span class="brand-name">SHUKKY</span>
+        <span class="brand-sub">shoes & more</span>
+      </a>
+
+      <div class="header-actions">
+        <button class="header-icon" id="search-toggle" aria-label="Search">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+        <button class="header-icon" id="account-toggle" aria-label="Account">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M20 21c0-4.418-3.582-8-8-8s-8 3.582-8 8"></path>
+          </svg>
+        </button>
+        <button class="header-icon cart-icon" id="cart-toggle" aria-label="Cart">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 01-8 0"></path>
+          </svg>
+          <span class="cart-badge" id="cart-badge">2</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Desktop Nav -->
+    <nav class="desktop-nav" id="desktop-nav">
+      <a href="#" class="nav-link active">New In</a>
+      <a href="#" class="nav-link">Shoes</a>
+      <a href="#" class="nav-link">Bags</a>
+      <a href="#" class="nav-link">Accessories</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- HERO SECTION                        -->
+    <!-- ═══════════════════════════════════ -->
+    <section class="hero" id="hero-section">
+      <div class="hero-image-wrapper">
+        <img
+          src="images/hero-banner.png"
+          alt="Luxury white sneakers and tan leather handbag arranged on an off-white surface"
+          class="hero-image"
+        />
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-content">
+        <p class="hero-eyebrow">New Collection</p>
+        <h1 class="hero-title"><em>Walk</em> in elegance</h1>
+        <p class="hero-subtitle">Curated luxury footwear and bags for the modern woman</p>
+        <a href="#" class="hero-cta" id="hero-shop-now">Shop Now</a>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- CATEGORY STRIP                      -->
+    <!-- ═══════════════════════════════════ -->
+    <section class="categories-section" id="categories-section">
+      <div class="section-header">
+        <h2 class="section-title">Explore</h2>
+      </div>
+      <div class="categories-scroll" id="categories-scroll">
+        <a href="#" class="category-card" id="category-shoes">
+          <div class="category-image-wrapper">
+            <img src="images/category-shoes.png" alt="Woman wearing stylish heeled mules on marble floor" class="category-image" />
+          </div>
+          <span class="category-label">Shoes</span>
+        </a>
+        <a href="#" class="category-card" id="category-bags">
+          <div class="category-image-wrapper">
+            <img src="images/category-bags.png" alt="Woman holding a structured leather tote bag" class="category-image" />
+          </div>
+          <span class="category-label">Bags</span>
+        </a>
+        <a href="#" class="category-card" id="category-accessories">
+          <div class="category-image-wrapper">
+            <img src="images/product-bag-2.png" alt="Premium black leather bag with gold chain" class="category-image" />
+          </div>
+          <span class="category-label">Accessories</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- EDITORIAL STORY SECTION             -->
+    <!-- ═══════════════════════════════════ -->
+    <section class="editorial" id="editorial-section">
+      <div class="editorial-inner">
+        <div class="editorial-text">
+          <p class="editorial-eyebrow">The Craft</p>
+          <h2 class="editorial-title"><em>Between you</em> and the ground</h2>
+          <p class="editorial-body">
+            Every step tells a story. Our shoes are selected for women who understand that
+            luxury lives in the details — the curve of a heel, the warmth of leather,
+            the quiet confidence of walking into a room and owning it.
+          </p>
+          <a href="#" class="editorial-link" id="editorial-discover">Discover the collection →</a>
+        </div>
+        <div class="editorial-image-wrapper">
+          <img
+            src="images/product-shoes-2.png"
+            alt="Premium beige suede heeled sandals"
+            class="editorial-image"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- FEATURED PRODUCTS                   -->
+    <!-- ═══════════════════════════════════ -->
+    <section class="featured-section" id="featured-section">
+      <div class="section-header">
+        <h2 class="section-title">New Arrivals</h2>
+        <a href="#" class="section-link" id="view-all-products">View all</a>
+      </div>
+      <div class="product-grid" id="product-grid">
+
+        <a href="#" class="product-card" id="product-1">
+          <div class="product-image-wrapper">
+            <img src="images/product-shoes-1.png" alt="Classic black leather loafers" class="product-image" loading="lazy" />
+            <span class="product-tag">New</span>
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Classic Leather Loafers</h3>
+            <p class="product-price">₦38,500.00</p>
+          </div>
+        </a>
+
+        <a href="#" class="product-card" id="product-2">
+          <div class="product-image-wrapper">
+            <img src="images/product-bag-1.png" alt="Cognac leather crossbody bag" class="product-image" loading="lazy" />
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Cognac Crossbody Bag</h3>
+            <p class="product-price">₦52,000.00</p>
+          </div>
+        </a>
+
+        <a href="#" class="product-card" id="product-3">
+          <div class="product-image-wrapper">
+            <img src="images/product-shoes-2.png" alt="Beige suede heeled sandals" class="product-image" loading="lazy" />
+            <span class="product-tag">New</span>
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Suede Heeled Sandals</h3>
+            <p class="product-price">₦45,000.00</p>
+          </div>
+        </a>
+
+        <a href="#" class="product-card" id="product-4">
+          <div class="product-image-wrapper">
+            <img src="images/product-bag-2.png" alt="Black quilted shoulder bag with gold chain" class="product-image" loading="lazy" />
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">Quilted Chain Bag</h3>
+            <p class="product-price">₦61,200.00</p>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- BRAND VALUES                        -->
+    <!-- ═══════════════════════════════════ -->
+    <section class="values-section" id="values-section">
+      <div class="values-grid">
+        <div class="value-item">
+          <div class="value-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
+            </svg>
+          </div>
+          <h3 class="value-title">Curated Selection</h3>
+          <p class="value-text">Every piece hand-picked for quality and style</p>
+        </div>
+        <div class="value-item">
+          <div class="value-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+          </div>
+          <h3 class="value-title">Nationwide Delivery</h3>
+          <p class="value-text">We deliver across Nigeria — fast and reliable</p>
+        </div>
+        <div class="value-item">
+          <div class="value-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3 class="value-title">Secure Payment</h3>
+          <p class="value-text">Powered by Flutterwave — your money is safe</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- NEWSLETTER                          -->
+    <!-- ═══════════════════════════════════ -->
+    <section class="newsletter" id="newsletter-section">
+      <div class="newsletter-inner">
+        <h2 class="newsletter-title">Stay in the loop</h2>
+        <p class="newsletter-text">Be the first to know about new arrivals and exclusive drops.</p>
+        <form class="newsletter-form" id="newsletter-form">
+          <input
+            type="email"
+            placeholder="Your email address"
+            class="newsletter-input"
+            id="newsletter-email"
+            aria-label="Email address"
+            required
+          />
+          <button type="submit" class="newsletter-button" id="newsletter-submit">Subscribe</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- FOOTER                              -->
+  <!-- ═══════════════════════════════════ -->
+  <footer class="footer" id="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">SHUKKY</span>
+        <p class="footer-tagline">Luxury footwear & bags for the modern woman.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-column">
+          <h4 class="footer-heading">Shop</h4>
+          <a href="#" class="footer-link">New Arrivals</a>
+          <a href="#" class="footer-link">Shoes</a>
+          <a href="#" class="footer-link">Bags</a>
+          <a href="#" class="footer-link">Accessories</a>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-heading">Support</h4>
+          <a href="#" class="footer-link">Contact Us</a>
+          <a href="#" class="footer-link">Delivery Info</a>
+          <a href="#" class="footer-link">Returns & Exchanges</a>
+          <a href="#" class="footer-link">FAQs</a>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-heading">Connect</h4>
+          <a href="#" class="footer-link">Instagram</a>
+          <a href="#" class="footer-link">WhatsApp</a>
+          <a href="#" class="footer-link">Twitter</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Shukky Shoes & More. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- BOTTOM NAV (MOBILE)                 -->
+  <!-- ═══════════════════════════════════ -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <a href="#" class="bottom-nav-item active" id="nav-home">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span>Home</span>
+    </a>
+    <a href="#" class="bottom-nav-item" id="nav-shop">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"></path>
+      </svg>
+      <span>Shop</span>
+    </a>
+    <a href="#" class="bottom-nav-item" id="nav-cart">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 01-8 0"></path>
+      </svg>
+      <span>Bag</span>
+    </a>
+    <a href="#" class="bottom-nav-item" id="nav-account">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M20 21c0-4.418-3.582-8-8-8s-8 3.582-8 8"></path>
+      </svg>
+      <span>Account</span>
+    </a>
+  </nav>
+
+</body>
+</html>

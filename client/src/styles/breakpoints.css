@@ -1,0 +1,32 @@
+/* Shared media queries and utilities */
+
+/* Container utility — 30px margins on mobile, scales up on larger screens */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-3); /* 12px mobile */
+  padding-right: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: var(--space-4); /* 16px tablet */
+    padding-right: var(--space-4);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: var(--space-6); /* 24px desktop */
+    padding-right: var(--space-6);
+  }
+}
+
+@media (min-width: 1440px) {
+  .container {
+    padding-left: var(--space-8); /* 32px wide */
+    padding-right: var(--space-8);
+  }
+}
+
