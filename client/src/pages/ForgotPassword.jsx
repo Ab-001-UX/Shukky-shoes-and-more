@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
+import Spinner from '../components/ui/Spinner'
 import api from '../lib/api'
 import styles from './ForgotPassword.module.css'
 
@@ -61,7 +62,14 @@ export default function ForgotPassword() {
             disabled={isSubmitting} 
             className={styles.submitButton}
           >
-            {isSubmitting ? 'Sending...' : 'Send Reset Link'}
+            {isSubmitting ? (
+              <>
+                <Spinner size="sm" color="white" />
+                <span>Sending...</span>
+              </>
+            ) : (
+              'Send Reset Link'
+            )}
           </button>
         </form>
       </div>

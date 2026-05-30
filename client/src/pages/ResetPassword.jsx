@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react'
+import Spinner from '../components/ui/Spinner'
 import api from '../lib/api'
 import styles from './ResetPassword.module.css'
 
@@ -102,7 +103,14 @@ export default function ResetPassword() {
             disabled={isSubmitting} 
             className={styles.submitButton}
           >
-            {isSubmitting ? 'Resetting...' : 'Reset Password'}
+            {isSubmitting ? (
+              <>
+                <Spinner size="sm" color="white" />
+                <span>Resetting...</span>
+              </>
+            ) : (
+              'Reset Password'
+            )}
           </button>
         </form>
       </div>

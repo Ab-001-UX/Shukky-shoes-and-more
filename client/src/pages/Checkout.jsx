@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { ArrowLeft, Lock, Info, MapPin } from 'lucide-react'
-import { useCartStore } from '../store/cartStore'
-import { useAuthStore } from '../store/authStore'
+import Spinner from '../components/ui/Spinner'
 import { formatPrice } from '../utils/formatPrice'
 import { loadFlutterwaveScript } from '../lib/flutterwave'
 import api from '../lib/api'
+import { useCartStore } from '../store/cartStore'
+import { useAuthStore } from '../store/authStore'
 import styles from './Checkout.module.css'
 
 export default function Checkout() {
@@ -459,13 +460,22 @@ export default function Checkout() {
               disabled={isSubmitting} 
               className={styles.payBtn}
             >
-              {formData.paymentMethod === 'ONLINE' ? <Lock size={16} /> : null}
-              {isSubmitting 
-                ? 'Processing...' 
-                : formData.paymentMethod === 'ONLINE' 
-                  ? `Pay ${formatPrice(total)}` 
-                  : 'Confirm Order'
-              }
+              {isSubmitting ? (
+                <>
+                  <Spinner size="sm" color="white" />
+                  <span>Processing...</span>
+                </>
+              ) : (
+                <>
+                  {formData.paymentMethod === 'ONLINE' && <Lock size={16} />}
+                  <span>
+                    {formData.paymentMethod === 'ONLINE' 
+                      ? `Pay ${formatPrice(total)}` 
+                      : 'Confirm Order'
+                    }
+                  </span>
+                </>
+              )}
             </button>
             <p className={styles.secureText}>Secure payment powered by Flutterwave</p>
           </div>

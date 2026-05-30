@@ -25,6 +25,7 @@ import Header from './components/layout/Header'
 import BottomNav from './components/layout/BottomNav'
 import CartDrawer from './components/cart/CartDrawer'
 import Toast from './components/ui/Toast'
+import AppLoadingScreen from './components/layout/AppLoadingScreen'
 import { useInactivityTimeout } from './hooks/useInactivityTimeout'
 
 export default function App() {
@@ -43,7 +44,7 @@ export default function App() {
   const { pathname } = useLocation()
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <AppLoadingScreen />
   }
 
   const isAdminRoute = pathname.startsWith('/admin')

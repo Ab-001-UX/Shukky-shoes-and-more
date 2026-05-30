@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
+import Spinner from '../components/ui/Spinner'
 import { useAuthStore } from '../store/authStore'
 import styles from './Login.module.css' // Reusing login styles for consistency
 
@@ -89,7 +90,14 @@ export default function Register() {
             disabled={isSubmitting} 
             className={styles.submitButton}
           >
-            {isSubmitting ? 'Creating account...' : 'Create Account'}
+            {isSubmitting ? (
+              <>
+                <Spinner size="sm" color="white" />
+                <span>Creating account...</span>
+              </>
+            ) : (
+              'Create Account'
+            )}
           </button>
         </form>
         

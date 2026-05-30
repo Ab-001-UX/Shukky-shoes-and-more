@@ -4,7 +4,6 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   withCredentials: true,
 })
-
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -12,7 +11,7 @@ api.interceptors.response.use(
     
     if (error.response) {
       // The server responded with a status code outside the 2xx range
-      message = error.response.data?.message || 'A server error occurred. Please try again.'
+      message = error.response.data?.message || 'Something went wrong. Please try again shortly.'
     } else if (error.request) {
       // The request was made but no response was received (Server is down or IP is wrong)
       const targetUrl = error.config?.url || 'the server'
