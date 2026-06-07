@@ -9,6 +9,11 @@ import rateLimit from 'express-rate-limit'
 
 const router = Router()
 
+function sanitizeLogInput(str) {
+  if (typeof str !== 'string') return str
+  return str.replace(/[\r\n]/g, '_')
+}
+
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 10,
@@ -50,6 +55,13 @@ router.post('/register', authLimiter, async (req, res) => {
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
+    // Clear any existing session cookie before setting a new one to prevent session fixation
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+    })
+
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -68,7 +80,7 @@ router.post('/register', authLimiter, async (req, res) => {
 router.post('/login', authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body
-    console.log(`[Login] Attempt for: ${email}`)
+    console.log('[Login] Attempt for: %s', sanitizeLogInput(email))
 
     if (!email || !password) {
       return res.status(400).json({ success: false, message: 'Email and password are required' })
@@ -76,14 +88,14 @@ router.post('/login', authLimiter, async (req, res) => {
 
     const user = await prisma.user.findUnique({ where: { email: email.toLowerCase().trim() } })
     if (!user) {
-      console.log(`[Login] Account not found: ${email}`)
+      console.log('[Login] Account not found: %s', sanitizeLogInput(email))
       return res.status(401).json({ success: false, message: 'Incorrect email' })
     }
 
-    console.log(`[Login] User found: ${user.email}, comparing password...`)
+    console.log('[Login] User found: %s, comparing password...', sanitizeLogInput(user.email))
     const isValid = await bcrypt.compare(password, user.password)
     if (!isValid) {
-      console.log(`[Login] Invalid password for: ${email}`)
+      console.log('[Login] Invalid password for: %s', sanitizeLogInput(email))
       return res.status(401).json({ success: false, message: 'Incorrect password. Please try again.' })
     }
 
@@ -98,6 +110,13 @@ router.post('/login', authLimiter, async (req, res) => {
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn })
 
     console.log(`[Login] Token signed, setting cookie...`)
+    // Clear any existing session cookie before setting a new one to prevent session fixation
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+    })
+
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -153,9 +172,9 @@ router.post('/forgot-password', authLimiter, async (req, res) => {
 
     // Create a unique secret for this user by combining JWT_SECRET and their current password hash
     const secret = process.env.JWT_SECRET + user.password
-    const token = jwt.sign({ userId: user.id }, secret, { expiresIn: '1h' })
+    const resetToken = jwt.sign({ userId: user.id }, secret, { expiresIn: '1h' })
 
-    await sendPasswordResetEmail(user.email, token)
+    await sendPasswordResetEmail(user.email, resetToken)
 
     return res.json({ success: true, message: 'Reset link sent! Please check your email.' })
   } catch (error) {
@@ -166,13 +185,13 @@ router.post('/forgot-password', authLimiter, async (req, res) => {
 
 router.post('/reset-password', authLimiter, async (req, res) => {
   try {
-    const { token, password } = req.body
-    if (!token || !password) {
+    const { token: resetToken, password } = req.body
+    if (!resetToken || !password) {
       return res.status(400).json({ success: false, message: 'Token and password are required' })
     }
 
     // Decode token without verification to extract userId
-    const decoded = jwt.decode(token)
+    const decoded = jwt.decode(resetToken)
     if (!decoded || !decoded.userId) {
       return res.status(400).json({ success: false, message: 'Invalid or expired token' })
     }
@@ -185,7 +204,7 @@ router.post('/reset-password', authLimiter, async (req, res) => {
     // Verify token using the secret that includes the user's current password
     const secret = process.env.JWT_SECRET + user.password
     try {
-      jwt.verify(token, secret)
+      jwt.verify(resetToken, secret)
     } catch (err) {
       return res.status(400).json({ success: false, message: 'Invalid or expired token' })
     }

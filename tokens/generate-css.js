@@ -16,18 +16,25 @@ const resolveReference = (refString, rootObj) => {
   const pathParts = refString.slice(1, -1).split('.');
   let current = rootObj;
   for (const part of pathParts) {
-    if (current[part] !== undefined) {
+    if (part === '__proto__' || part === 'constructor' || part === 'prototype') {
+      console.warn(`Warning: Blocked potential prototype pollution key '${part}'`);
+      return refString;
+    }
+    if (current && current[part] !== undefined) {
       current = current[part];
-    } else {
+    } else if (current) {
       // Try case-insensitive match
       const lowerPart = part.toLowerCase();
       const matchedKey = Object.keys(current).find(k => k.toLowerCase() === lowerPart);
-      if (matchedKey && current[matchedKey] !== undefined) {
+      if (matchedKey && matchedKey !== '__proto__' && matchedKey !== 'constructor' && matchedKey !== 'prototype' && current[matchedKey] !== undefined) {
         current = current[matchedKey];
       } else {
         console.warn(`Warning: Could not resolve reference ${refString} at part '${part}'`);
         return refString; // Return original if not found
       }
+    } else {
+      console.warn(`Warning: Could not resolve reference ${refString} at part '${part}'`);
+      return refString;
     }
   }
   // Recursively resolve if the resolved value is also a reference

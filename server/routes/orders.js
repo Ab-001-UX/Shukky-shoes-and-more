@@ -4,6 +4,11 @@ import prisma from '../lib/prisma.js'
 
 const router = Router()
 
+function sanitizeLogInput(str) {
+  if (typeof str !== 'string') return str
+  return str.replace(/[\r\n]/g, '_')
+}
+
 const optionalAuth = async (req, res, next) => {
   const token = req.cookies?.token
   if (token) {
@@ -39,14 +44,14 @@ router.post('/', optionalAuth, async (req, res) => {
     for (const item of items) {
       const dbProduct = dbProducts.find(p => p.id === item.id)
       if (!dbProduct || dbProduct.status !== 'ACTIVE' || dbProduct.stock < item.quantity) {
-        console.log('[CreateOrder] Product unavailable or low stock:', item.name)
+        console.log('[CreateOrder] Product unavailable or low stock: %s', sanitizeLogInput(item.name))
         return res.status(400).json({ success: false, message: `Product ${item.name} is unavailable or out of stock` })
       }
       calculatedTotal += dbProduct.price * item.quantity
     }
 
     if (calculatedTotal !== totalAmount) {
-      console.log('[CreateOrder] Price mismatch:', { calculatedTotal, totalAmount })
+      console.log('[CreateOrder] Price mismatch: calculatedTotal=%d, totalAmount=%s', calculatedTotal, sanitizeLogInput(String(totalAmount)))
       return res.status(400).json({ success: false, message: 'Price mismatch' })
     }
 

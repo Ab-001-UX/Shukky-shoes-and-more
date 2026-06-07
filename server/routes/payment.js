@@ -1,10 +1,30 @@
 import { Router } from 'express'
 import crypto from 'crypto'
+import jwt from 'jsonwebtoken'
 import prisma from '../lib/prisma.js'
 import { verifyTransaction } from '../services/paymentService.js'
 import { sendOrderConfirmationEmail, sendAdminNotificationEmail } from '../services/emailService.js'
 
 const router = Router()
+
+function sanitizeLogInput(str) {
+  if (typeof str !== 'string') return str
+  return str.replace(/[\r\n]/g, '_')
+}
+
+const optionalAuth = async (req, res, next) => {
+  const token = req.cookies?.token
+  if (token) {
+    try {
+      const payload = jwt.verify(token, process.env.JWT_SECRET)
+      const user = await prisma.user.findUnique({ where: { id: payload.userId } })
+      if (user) req.user = user
+    } catch (e) {
+      // ignore
+    }
+  }
+  next()
+}
 
 function verifyFlutterwaveWebhook(req, res, next) {
   const signature = req.headers['flutterwave-signature']
@@ -32,7 +52,7 @@ function verifyFlutterwaveWebhook(req, res, next) {
 router.post('/webhook', verifyFlutterwaveWebhook, async (req, res) => {
   try {
     const { event, data } = req.body
-    console.log(`[Webhook] Received event: ${event}`)
+    console.log('[Webhook] Received event: %s', sanitizeLogInput(event))
 
     // v4 charge event
     if (event === 'charge.completed' && data) {
@@ -104,12 +124,14 @@ router.post('/webhook', verifyFlutterwaveWebhook, async (req, res) => {
 })
 
 // Frontend-initiated verification — called after Flutterwave redirects back
-router.get('/verify/:orderId', async (req, res) => {
+router.get('/verify/:orderId', optionalAuth, async (req, res) => {
   try {
     const { orderId } = req.params
     const { transaction_id } = req.query
 
-    console.log(`[PaymentVerify] Verifying order: ${orderId}, txId: ${transaction_id}`)
+    const safeOrderId = sanitizeLogInput(orderId)
+    const safeTxId = sanitizeLogInput(transaction_id)
+    console.log('[PaymentVerify] Verifying order: %s, txId: %s', safeOrderId, safeTxId)
 
     const order = await prisma.order.findUnique({
       where: { id: orderId },
@@ -118,6 +140,11 @@ router.get('/verify/:orderId', async (req, res) => {
 
     if (!order) {
       return res.status(404).json({ success: false, message: 'Order not found' })
+    }
+
+    // IDOR protection: if the order belongs to a user, ensure the requesting user matches or is an ADMIN
+    if (order.userId && req.user?.role !== 'ADMIN' && order.userId !== req.user?.id) {
+      return res.status(403).json({ success: false, message: 'Access denied' })
     }
 
     // If already verified, just return the order
@@ -136,7 +163,7 @@ router.get('/verify/:orderId', async (req, res) => {
         const freshOrder = await prisma.order.findUnique({ where: { id: orderId } })
         if (freshOrder.paymentStatus === 'SUCCESS') {
           // Webhook already confirmed this — just return the latest order state
-          console.log(`[PaymentVerify] Order ${orderId} already confirmed by webhook, skipping`)
+          console.log('[PaymentVerify] Order %s already confirmed by webhook, skipping', sanitizeLogInput(orderId))
           const alreadyUpdated = await prisma.order.findUnique({
             where: { id: orderId },
             include: { items: { include: { product: true } }, deliveryDetails: true },
@@ -176,7 +203,7 @@ router.get('/verify/:orderId', async (req, res) => {
           include: { items: { include: { product: true } }, deliveryDetails: true },
         })
 
-        console.log(`[PaymentVerify] Order ${orderId} confirmed!`)
+        console.log('[PaymentVerify] Order %s confirmed!', sanitizeLogInput(orderId))
         return res.json({ success: true, data: updatedOrder })
       } else if (verifiedData.status === 'failed') {
         await prisma.order.update({
@@ -197,7 +224,7 @@ router.get('/verify/:orderId', async (req, res) => {
     // No transaction_id — just return current state
     return res.json({ success: true, data: order })
   } catch (error) {
-    console.error('[PaymentVerify] Error:', error.message)
+    console.error('[PaymentVerify] Error:', error)
     return res.status(500).json({ success: false, message: 'Payment verification failed' })
   }
 })

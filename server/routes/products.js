@@ -3,10 +3,15 @@ import prisma from '../lib/prisma.js'
 
 const router = Router()
 
+function sanitizeLogInput(str) {
+  if (typeof str !== 'string') return str
+  return str.replace(/[\r\n]/g, '_')
+}
+
 router.get('/', async (req, res) => {
   try {
     const { category, search, tags, colors, page = 1, limit = 12 } = req.query
-    console.log(`[GetProducts] Category: ${category}, Search: ${search}`)
+    console.log('[GetProducts] Category: %s, Search: %s', sanitizeLogInput(category), sanitizeLogInput(search))
 
     const where = { status: 'ACTIVE' }
     

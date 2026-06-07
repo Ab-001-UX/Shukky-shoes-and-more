@@ -4,6 +4,11 @@ import prisma from '../lib/prisma.js'
 
 const router = Router()
 
+function sanitizeLogInput(str) {
+  if (typeof str !== 'string') return str
+  return str.replace(/[\r\n]/g, '_')
+}
+
 // GET Cloudinary Signature for client-side upload
 router.get('/cloudinary-signature', (req, res) => {
   try {
@@ -14,7 +19,7 @@ router.get('/cloudinary-signature', (req, res) => {
       return res.status(500).json({ success: false, message: 'Cloudinary not configured' })
     }
 
-    const signature = crypto.createHash('sha1').update(`timestamp=${timestamp}${apiSecret}`).digest('hex')
+    const signature = crypto.createHash('sha256').update(`timestamp=${timestamp}${apiSecret}`).digest('hex')
     
     res.json({ 
       success: true, 
@@ -245,7 +250,7 @@ router.put('/policies/:type', async (req, res) => {
 
     return res.json({ success: true, data: policy })
   } catch (error) {
-    console.error(`[AdminUpdatePolicy:${req.params.type}]`, error)
+    console.error('[AdminUpdatePolicy]', sanitizeLogInput(req.params.type), error)
     return res.status(500).json({ success: false, message: 'Failed to update policy in database' })
   }
 })
