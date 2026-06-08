@@ -15,8 +15,8 @@ class HybridCache {
     if (redis) {
       try {
         const ttlSec = Math.ceil(ttlMs / 1000)
-        // Store as stringified JSON
-        await redis.set(key, JSON.stringify(value), { ex: ttlSec })
+        // Store as stringified JSON under shukky: prefix
+        await redis.set(`shukky:${key}`, JSON.stringify(value), { ex: ttlSec })
       } catch (error) {
         console.error(`[Redis] Error setting key ${key}:`, error)
       }
@@ -35,7 +35,7 @@ class HybridCache {
     // 2. Fallback to Upstash Redis
     if (redis) {
       try {
-        const value = await redis.get(key)
+        const value = await redis.get(`shukky:${key}`)
         if (value) {
           // Parse value (Upstash SDK parses JSON automatically or returns a string/object)
           const parsed = typeof value === 'string' ? JSON.parse(value) : value
@@ -58,7 +58,7 @@ class HybridCache {
     this.localCache.delete(key)
     if (redis) {
       try {
-        await redis.del(key)
+        await redis.del(`shukky:${key}`)
       } catch (error) {
         console.error(`[Redis] Error deleting key ${key}:`, error)
       }
@@ -73,12 +73,13 @@ class HybridCache {
       }
     }
 
-    // Clear from Redis (using scan for prefix*)
+    // Clear from Redis (using scan for shukky:prefix*)
     if (redis) {
       try {
         let cursor = 0
+        const searchPattern = `shukky:${prefix}*`
         do {
-          const [nextCursor, keys] = await redis.scan(cursor, { match: `${prefix}*`, count: 100 })
+          const [nextCursor, keys] = await redis.scan(cursor, { match: searchPattern, count: 100 })
           cursor = Number(nextCursor)
           if (keys && keys.length > 0) {
             await redis.del(...keys)
@@ -89,6 +90,7 @@ class HybridCache {
       }
     }
   }
+
 
   clearAll() {
     this.localCache.clear()
