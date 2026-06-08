@@ -19,14 +19,18 @@ dotenv.config()
 
 const app = express()
 
-const allowedOrigins = [
-  'http://localhost:5173',
-  process.env.FRONTEND_URL || 'https://shukky-shoes-and-more.vercel.app'
-]
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true
+  if (origin === 'http://localhost:5173') return true
+  if (origin === process.env.FRONTEND_URL) return true
+  // Dynamically allow all Vercel preview and production subdomains
+  if (origin.endsWith('.vercel.app')) return true
+  return false
+}
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (isAllowedOrigin(origin)) {
       callback(null, true)
     } else {
       callback(new Error('Not allowed by CORS'))
@@ -34,6 +38,7 @@ app.use(cors({
   },
   credentials: true
 }))
+
 
 
 app.use(securityHeaders)
