@@ -88,3 +88,41 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+.skeletonCard {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  height: 100%;
+}
+
+.skeletonImage {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.skeletonInfo {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  gap: var(--space-2);
+}
+
+.skeletonName {
+  height: 20px !important;
+  margin-bottom: 4px;
+}
+
+.skeletonPrice {
+  height: 16px !important;
+  margin-bottom: 8px;
+}
+
+.skeletonLink {
+  height: 14px !important;
+  align-self: flex-end;
+}
+

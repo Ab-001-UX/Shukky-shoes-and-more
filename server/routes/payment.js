@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken'
 import prisma from '../lib/prisma.js'
 import { verifyTransaction } from '../services/paymentService.js'
 import { sendOrderConfirmationEmail, sendAdminNotificationEmail } from '../services/emailService.js'
+import { productCache } from '../lib/cache.js'
 
 const router = Router()
 
@@ -85,6 +86,10 @@ router.post('/webhook', verifyFlutterwaveWebhook, async (req, res) => {
               data: { stock: { decrement: item.quantity } }
             }))
           ])
+
+          // Invalidate caches since stock changed
+          productCache.clearPattern('products:')
+          order.items.forEach(item => productCache.delete(`product:${item.productId}`))
 
           // Auto-update status to OUT_OF_STOCK if stock <= 0
           for (const item of order.items) {
@@ -181,6 +186,10 @@ router.get('/verify/:orderId', optionalAuth, async (req, res) => {
             data: { stock: { decrement: item.quantity } },
           })),
         ])
+
+        // Invalidate caches since stock changed
+        productCache.clearPattern('products:')
+        order.items.forEach(item => productCache.delete(`product:${item.productId}`))
 
         // Auto-update status to OUT_OF_STOCK if stock <= 0
         for (const item of order.items) {

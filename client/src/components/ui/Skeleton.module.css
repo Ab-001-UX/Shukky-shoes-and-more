@@ -1,0 +1,38 @@
+.skeleton {
+  background-color: var(--color-border, #E5E7EB);
+  position: relative;
+  overflow: hidden;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.text {
+  height: 16px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.rect {
+  border-radius: 8px;
+}
+
+.circle {
+  border-radius: 50%;
+}
+
+.image {
+  border-radius: 12px;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}

@@ -13,6 +13,7 @@ import adminRoutes from './routes/admin.js'
 import policyRoutes from './routes/policies.js'
 import { authenticate } from './middleware/authenticate.js'
 import { adminOnly } from './middleware/adminOnly.js'
+import { securityHeaders } from './middleware/securityHeaders.js'
 
 dotenv.config()
 
@@ -22,6 +23,8 @@ app.use(cors({
   origin: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : 'http://localhost:5173',
   credentials: true
 }))
+
+app.use(securityHeaders)
 
 // Capture raw body for Flutterwave webhook signature verification
 app.use(express.json({

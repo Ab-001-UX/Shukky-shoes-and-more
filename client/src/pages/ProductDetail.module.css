@@ -378,3 +378,55 @@
   font-weight: 500;
   text-decoration: none;
 }
+
+.skeletonGallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.skeletonMainImage {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.skeletonThumbnails {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.skeletonThumbnail {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-md);
+}
+
+.skeletonLabel {
+  height: 20px !important;
+  margin-bottom: var(--space-2);
+}
+
+.skeletonRow {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.skeletonOption {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+}
+
+.skeletonPolicy {
+  height: 120px !important;
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.skeletonButton {
+  height: 56px !important;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-2);
+}
+

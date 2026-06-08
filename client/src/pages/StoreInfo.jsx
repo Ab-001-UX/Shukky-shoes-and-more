@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { ArrowLeft, MapPin, Phone, Facebook, AtSign, Clock, Truck, RefreshCw, ShieldCheck, ChevronDown, ChevronUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { usePolicies } from '../hooks/usePolicies'
+import Skeleton from '../components/ui/Skeleton'
 import styles from './StoreInfo.module.css'
 
 export default function StoreInfo() {
@@ -65,8 +66,28 @@ export default function StoreInfo() {
 
   if (isLoading) {
     return (
-      <div className={styles.stateWrapper}>
-        <div className={styles.spinner}></div>
+      <div className="container" style={{ paddingTop: 'var(--space-8)', paddingBottom: 'var(--space-16)' }}>
+        <div className={styles.backLink}>
+          <Skeleton variant="text" width="120px" height="20px" />
+        </div>
+
+        <Skeleton variant="text" width="45%" height="36px" style={{ marginBottom: '32px' }} />
+
+        <div className={styles.sections}>
+          {Array.from({ length: 4 }).map((_, idx) => (
+            <div key={idx} className={styles.section} style={{ padding: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                <Skeleton variant="circle" width="24px" height="24px" />
+                <Skeleton variant="text" width="30%" height="24px" style={{ margin: 0 }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <Skeleton variant="text" width="90%" />
+                <Skeleton variant="text" width="95%" />
+                <Skeleton variant="text" width="70%" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     )
   }

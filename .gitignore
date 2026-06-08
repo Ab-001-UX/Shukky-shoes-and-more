@@ -34,3 +34,9 @@ Thumbs.db
 # Prisma
 /server/prisma/dev.db
 /server/prisma/dev.db-journal
+
+# Cloud placeholders (OneDrive offline files)
+server/backup.js
+server/backup_data.json
+server/scratch/wipe-data.js
+

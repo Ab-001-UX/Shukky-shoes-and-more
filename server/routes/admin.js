@@ -1,12 +1,30 @@
 import { Router } from 'express'
 import crypto from 'crypto'
 import prisma from '../lib/prisma.js'
+import { productCache } from '../lib/cache.js'
 
 const router = Router()
 
 function sanitizeLogInput(str) {
   if (typeof str !== 'string') return str
   return str.replace(/[\r\n]/g, '_')
+}
+
+async function logAdminActivity(req, action, details) {
+  try {
+    const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+    await prisma.auditLog.create({
+      data: {
+        userId: req.user.id,
+        userEmail: req.user.email,
+        action,
+        details: typeof details === 'string' ? details : JSON.stringify(details),
+        ipAddress
+      }
+    })
+  } catch (err) {
+    console.error('[AuditLog] Failed to create audit log:', err)
+  }
 }
 
 // GET Cloudinary Signature for client-side upload
@@ -77,6 +95,10 @@ router.patch('/orders/:id', async (req, res) => {
       where: { id: req.params.id },
       data
     })
+
+    // Log admin activity
+    logAdminActivity(req, 'UPDATE_ORDER', { orderId: order.id, data })
+
     return res.json({ success: true, data: order })
   } catch (error) {
     console.error('[AdminUpdateOrder]', error)
@@ -115,6 +137,12 @@ router.post('/products', async (req, res) => {
         status: status || 'ACTIVE'
       }
     })
+
+    // Invalidate product list cache
+    productCache.clearPattern('products:')
+
+    // Log admin activity
+    logAdminActivity(req, 'CREATE_PRODUCT', { productId: product.id, name: product.name })
 
     return res.status(201).json({ success: true, data: product })
   } catch (error) {
@@ -159,6 +187,13 @@ router.patch('/products/:id', async (req, res) => {
       data
     })
 
+    // Invalidate caches
+    productCache.clearPattern('products:')
+    productCache.delete(`product:${req.params.id}`)
+
+    // Log admin activity
+    logAdminActivity(req, 'UPDATE_PRODUCT', { productId: product.id, data })
+
     return res.json({ success: true, data: product })
   } catch (error) {
     console.error('[AdminUpdateProduct]', error)
@@ -176,6 +211,14 @@ router.delete('/products/:id', async (req, res) => {
       where: { id: req.params.id },
       data: { status: 'ARCHIVED' }
     })
+
+    // Invalidate caches
+    productCache.clearPattern('products:')
+    productCache.delete(`product:${req.params.id}`)
+
+    // Log admin activity
+    logAdminActivity(req, 'DELETE_PRODUCT', { productId: product.id })
+
     return res.json({ success: true, data: product })
   } catch (error) {
     console.error('[AdminDeleteProduct]', error)
@@ -215,6 +258,13 @@ router.patch('/inventory/:id', async (req, res) => {
       }
     })
 
+    // Invalidate caches
+    productCache.clearPattern('products:')
+    productCache.delete(`product:${req.params.id}`)
+
+    // Log admin activity
+    logAdminActivity(req, 'UPDATE_INVENTORY', { productId: product.id, stock: stockNum })
+
     return res.json({ success: true, data: product })
   } catch (error) {
     console.error('[AdminUpdateInventory]', error)
@@ -247,6 +297,9 @@ router.put('/policies/:type', async (req, res) => {
       update: { content },
       create: { type: type.toUpperCase(), content }
     })
+
+    // Log admin activity
+    logAdminActivity(req, 'UPDATE_POLICY', { type: type.toUpperCase() })
 
     return res.json({ success: true, data: policy })
   } catch (error) {

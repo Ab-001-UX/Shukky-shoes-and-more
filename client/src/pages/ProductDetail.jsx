@@ -7,6 +7,7 @@ import { useCartStore } from '../store/cartStore'
 import { useToastStore } from '../store/toastStore'
 import ProductImageGallery from '../components/product/ProductImageGallery'
 import { formatPrice } from '../utils/formatPrice'
+import Skeleton from '../components/ui/Skeleton'
 import styles from './ProductDetail.module.css'
 
 export default function ProductDetail() {
@@ -33,8 +34,62 @@ export default function ProductDetail() {
 
   if (productLoading || policiesLoading) {
     return (
-      <div className={styles.stateWrapper}>
-        <div className={styles.spinner}></div>
+      <div className="container">
+        <div className={styles.page}>
+          <div className={styles.backLink}>
+            <Skeleton variant="text" width="120px" height="20px" />
+          </div>
+
+          <div className={styles.content}>
+            <div className={styles.gallerySection}>
+              <div className={styles.skeletonGallery}>
+                <Skeleton variant="image" className={styles.skeletonMainImage} />
+                <div className={styles.skeletonThumbnails}>
+                  <Skeleton className={styles.skeletonThumbnail} />
+                  <Skeleton className={styles.skeletonThumbnail} />
+                  <Skeleton className={styles.skeletonThumbnail} />
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.detailsSection}>
+              <Skeleton variant="text" width="60%" height="32px" style={{ marginBottom: '16px' }} />
+              <Skeleton variant="text" width="40%" height="24px" style={{ marginBottom: '24px' }} />
+              
+              <div style={{ marginBottom: '24px' }}>
+                <Skeleton variant="text" width="25%" className={styles.skeletonLabel} />
+                <Skeleton variant="text" width="100%" />
+                <Skeleton variant="text" width="95%" />
+                <Skeleton variant="text" width="70%" />
+              </div>
+
+              <div style={{ marginBottom: '24px' }}>
+                <Skeleton variant="text" width="20%" className={styles.skeletonLabel} />
+                <div className={styles.skeletonRow}>
+                  <Skeleton className={styles.skeletonOption} />
+                  <Skeleton className={styles.skeletonOption} />
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '24px' }}>
+                <Skeleton variant="text" width="15%" className={styles.skeletonLabel} />
+                <div className={styles.skeletonRow}>
+                  <Skeleton className={styles.skeletonOption} />
+                  <Skeleton className={styles.skeletonOption} />
+                  <Skeleton className={styles.skeletonOption} />
+                  <Skeleton className={styles.skeletonOption} />
+                </div>
+              </div>
+
+              <Skeleton variant="rect" className={styles.skeletonPolicy} />
+              
+              <div className={styles.ctaGroup}>
+                <Skeleton variant="rect" className={styles.skeletonButton} />
+                <Skeleton variant="rect" className={styles.skeletonButton} style={{ height: '52px' }} />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

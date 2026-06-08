@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import prisma from '../lib/prisma.js'
+import { productCache } from '../lib/cache.js'
 
 const router = Router()
 
@@ -12,6 +13,13 @@ router.get('/', async (req, res) => {
   try {
     const { category, search, tags, colors, page = 1, limit = 12 } = req.query
     console.log('[GetProducts] Category: %s, Search: %s', sanitizeLogInput(category), sanitizeLogInput(search))
+
+    const cacheKey = `products:${category || ''}:${search || ''}:${tags || ''}:${colors || ''}:${page}:${limit}`
+    const cached = productCache.get(cacheKey)
+    if (cached) {
+      console.log(`[GetProducts] Cache hit: ${cacheKey}`)
+      return res.json({ success: true, data: cached })
+    }
 
     const where = { status: 'ACTIVE' }
     
@@ -33,6 +41,7 @@ router.get('/', async (req, res) => {
     })
 
     console.log(`[GetProducts] Success: Found ${products.length} products`)
+    productCache.set(cacheKey, products)
     return res.json({ success: true, data: products })
   } catch (error) {
     console.error('[GetProducts] CRITICAL ERROR:', error)
@@ -42,14 +51,23 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
+    const { id } = req.params
+    const cacheKey = `product:${id}`
+    const cached = productCache.get(cacheKey)
+    if (cached) {
+      console.log(`[GetProductById] Cache hit: ${cacheKey}`)
+      return res.json({ success: true, data: cached })
+    }
+
     const product = await prisma.product.findUnique({
-      where: { id: req.params.id, status: 'ACTIVE' },
+      where: { id, status: 'ACTIVE' },
     })
 
     if (!product) {
       return res.status(404).json({ success: false, message: 'Product not found' })
     }
 
+    productCache.set(cacheKey, product)
     return res.json({ success: true, data: product })
   } catch (error) {
     console.error('[GetProductById]', error)

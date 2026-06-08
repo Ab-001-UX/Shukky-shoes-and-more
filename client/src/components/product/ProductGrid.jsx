@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ShoppingBag, RefreshCcw } from 'lucide-react'
 import ProductCard from './ProductCard'
+import Skeleton from '../ui/Skeleton'
 import styles from './ProductGrid.module.css'
 
 export default function ProductGrid({ products, isLoading, error, refetch, onAddToCart }) {
@@ -14,9 +15,17 @@ export default function ProductGrid({ products, isLoading, error, refetch, onAdd
 
   if (isLoading) {
     return (
-      <div className={styles.stateWrapper}>
-        <div className={styles.spinner}></div>
-        <p className={styles.stateMessage}>Loading products...</p>
+      <div className={styles.grid}>
+        {Array.from({ length: 8 }).map((_, idx) => (
+          <div key={idx} className={styles.skeletonCard}>
+            <Skeleton variant="image" className={styles.skeletonImage} />
+            <div className={styles.skeletonInfo}>
+              <Skeleton variant="text" width="80%" className={styles.skeletonName} />
+              <Skeleton variant="text" width="50%" className={styles.skeletonPrice} />
+              <Skeleton variant="text" width="60%" className={styles.skeletonLink} />
+            </div>
+          </div>
+        ))}
       </div>
     )
   }
