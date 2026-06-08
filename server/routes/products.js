@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
     console.log('[GetProducts] Category: %s, Search: %s', sanitizeLogInput(category), sanitizeLogInput(search))
 
     const cacheKey = `products:${category || ''}:${search || ''}:${tags || ''}:${colors || ''}:${page}:${limit}`
-    const cached = productCache.get(cacheKey)
+    const cached = await productCache.get(cacheKey)
     if (cached) {
       console.log(`[GetProducts] Cache hit: ${cacheKey}`)
       return res.json({ success: true, data: cached })
@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
     })
 
     console.log(`[GetProducts] Success: Found ${products.length} products`)
-    productCache.set(cacheKey, products)
+    await productCache.set(cacheKey, products)
     return res.json({ success: true, data: products })
   } catch (error) {
     console.error('[GetProducts] CRITICAL ERROR:', error)
@@ -53,7 +53,7 @@ router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params
     const cacheKey = `product:${id}`
-    const cached = productCache.get(cacheKey)
+    const cached = await productCache.get(cacheKey)
     if (cached) {
       console.log(`[GetProductById] Cache hit: ${cacheKey}`)
       return res.json({ success: true, data: cached })
@@ -67,7 +67,7 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Product not found' })
     }
 
-    productCache.set(cacheKey, product)
+    await productCache.set(cacheKey, product)
     return res.json({ success: true, data: product })
   } catch (error) {
     console.error('[GetProductById]', error)

@@ -88,8 +88,8 @@ router.post('/webhook', verifyFlutterwaveWebhook, async (req, res) => {
           ])
 
           // Invalidate caches since stock changed
-          productCache.clearPattern('products:')
-          order.items.forEach(item => productCache.delete(`product:${item.productId}`))
+          await productCache.clearPattern('products:')
+          await Promise.all(order.items.map(item => productCache.delete(`product:${item.productId}`)))
 
           // Auto-update status to OUT_OF_STOCK if stock <= 0
           for (const item of order.items) {
@@ -188,8 +188,8 @@ router.get('/verify/:orderId', optionalAuth, async (req, res) => {
         ])
 
         // Invalidate caches since stock changed
-        productCache.clearPattern('products:')
-        order.items.forEach(item => productCache.delete(`product:${item.productId}`))
+        await productCache.clearPattern('products:')
+        await Promise.all(order.items.map(item => productCache.delete(`product:${item.productId}`)))
 
         // Auto-update status to OUT_OF_STOCK if stock <= 0
         for (const item of order.items) {

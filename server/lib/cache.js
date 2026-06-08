@@ -1,41 +1,98 @@
-class MemoryCache {
+import redis from './redis.js'
+
+class HybridCache {
   constructor() {
-    this.cache = new Map()
+    this.localCache = new Map()
   }
 
-  set(key, value, ttlMs = 5 * 60 * 1000) {
+  async set(key, value, ttlMs = 5 * 60 * 1000) {
     const expiresAt = Date.now() + ttlMs
-    this.cache.set(key, { value, expiresAt })
-  }
-
-  get(key) {
-    const entry = this.cache.get(key)
-    if (!entry) return null
     
-    if (Date.now() > entry.expiresAt) {
-      this.cache.delete(key)
-      return null
+    // Save to local in-memory cache
+    this.localCache.set(key, { value, expiresAt })
+
+    // Save to Upstash Redis if available
+    if (redis) {
+      try {
+        const ttlSec = Math.ceil(ttlMs / 1000)
+        // Store as stringified JSON
+        await redis.set(key, JSON.stringify(value), { ex: ttlSec })
+      } catch (error) {
+        console.error(`[Redis] Error setting key ${key}:`, error)
+      }
     }
-    
-    return entry.value
   }
 
-  delete(key) {
-    this.cache.delete(key)
+  async get(key) {
+    // 1. Check local in-memory cache first (sub-millisecond)
+    const localEntry = this.localCache.get(key)
+    if (localEntry && Date.now() <= localEntry.expiresAt) {
+      return localEntry.value
+    } else if (localEntry) {
+      this.localCache.delete(key) // Evict expired local key
+    }
+
+    // 2. Fallback to Upstash Redis
+    if (redis) {
+      try {
+        const value = await redis.get(key)
+        if (value) {
+          // Parse value (Upstash SDK parses JSON automatically or returns a string/object)
+          const parsed = typeof value === 'string' ? JSON.parse(value) : value
+          
+          // Hydrate local cache
+          const ttlMs = 5 * 60 * 1000 // default 5m
+          this.localCache.set(key, { value: parsed, expiresAt: Date.now() + ttlMs })
+          
+          return parsed
+        }
+      } catch (error) {
+        console.error(`[Redis] Error getting key ${key}:`, error)
+      }
+    }
+
+    return null
   }
 
-  // Clear keys starting with a prefix
-  clearPattern(prefix) {
-    for (const key of this.cache.keys()) {
+  async delete(key) {
+    this.localCache.delete(key)
+    if (redis) {
+      try {
+        await redis.del(key)
+      } catch (error) {
+        console.error(`[Redis] Error deleting key ${key}:`, error)
+      }
+    }
+  }
+
+  async clearPattern(prefix) {
+    // Clear locally
+    for (const key of this.localCache.keys()) {
       if (key.startsWith(prefix)) {
-        this.cache.delete(key)
+        this.localCache.delete(key)
+      }
+    }
+
+    // Clear from Redis (using scan for prefix*)
+    if (redis) {
+      try {
+        let cursor = 0
+        do {
+          const [nextCursor, keys] = await redis.scan(cursor, { match: `${prefix}*`, count: 100 })
+          cursor = Number(nextCursor)
+          if (keys && keys.length > 0) {
+            await redis.del(...keys)
+          }
+        } while (cursor !== 0)
+      } catch (error) {
+        console.error(`[Redis] Error clearing pattern ${prefix}:`, error)
       }
     }
   }
 
   clearAll() {
-    this.cache.clear()
+    this.localCache.clear()
   }
 }
 
-export const productCache = new MemoryCache()
+export const productCache = new HybridCache()

@@ -1,8 +1,10 @@
 // Triggering restart for .env changes
+import './lib/sentry.js'
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
+import * as Sentry from '@sentry/node'
 
 
 import authRoutes from './routes/auth.js'
@@ -74,6 +76,10 @@ app.get('/api/cron/ping', async (req, res) => {
     res.status(500).json({ status: 'error', message: 'Database connection failed' })
   }
 })
+
+if (process.env.SENTRY_DSN) {
+  Sentry.setupExpressErrorHandler(app)
+}
 
 // Global error handler
 app.use((err, req, res, next) => {

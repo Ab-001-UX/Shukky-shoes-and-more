@@ -139,7 +139,7 @@ router.post('/products', async (req, res) => {
     })
 
     // Invalidate product list cache
-    productCache.clearPattern('products:')
+    await productCache.clearPattern('products:')
 
     // Log admin activity
     logAdminActivity(req, 'CREATE_PRODUCT', { productId: product.id, name: product.name })
@@ -188,8 +188,8 @@ router.patch('/products/:id', async (req, res) => {
     })
 
     // Invalidate caches
-    productCache.clearPattern('products:')
-    productCache.delete(`product:${req.params.id}`)
+    await productCache.clearPattern('products:')
+    await productCache.delete(`product:${req.params.id}`)
 
     // Log admin activity
     logAdminActivity(req, 'UPDATE_PRODUCT', { productId: product.id, data })
@@ -213,8 +213,8 @@ router.delete('/products/:id', async (req, res) => {
     })
 
     // Invalidate caches
-    productCache.clearPattern('products:')
-    productCache.delete(`product:${req.params.id}`)
+    await productCache.clearPattern('products:')
+    await productCache.delete(`product:${req.params.id}`)
 
     // Log admin activity
     logAdminActivity(req, 'DELETE_PRODUCT', { productId: product.id })
@@ -259,8 +259,8 @@ router.patch('/inventory/:id', async (req, res) => {
     })
 
     // Invalidate caches
-    productCache.clearPattern('products:')
-    productCache.delete(`product:${req.params.id}`)
+    await productCache.clearPattern('products:')
+    await productCache.delete(`product:${req.params.id}`)
 
     // Log admin activity
     logAdminActivity(req, 'UPDATE_INVENTORY', { productId: product.id, stock: stockNum })
