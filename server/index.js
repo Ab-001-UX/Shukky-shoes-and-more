@@ -5,6 +5,8 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import * as Sentry from '@sentry/node'
+import prisma from './lib/prisma.js'
+
 
 
 import authRoutes from './routes/auth.js'
@@ -68,14 +70,26 @@ app.get('/health', (req, res) => {
 app.get('/api/cron/ping', async (req, res) => {
   try {
     // Fetch 1 item to force a database connection
-    await import('./lib/prisma.js').then(({ default: prisma }) => {
-      return prisma.product.findFirst()
-    })
+    await prisma.product.findFirst()
     res.json({ status: 'alive', message: 'Database connection successful' })
   } catch (error) {
-    res.status(500).json({ status: 'error', message: 'Database connection failed' })
+    console.error('[Cron Ping Error] Database connection failed:', error)
+    res.status(500).json({ status: 'error', message: 'Database connection failed', error: error.message })
   }
 })
+
+// Keep-alive database ping every 6 hours to prevent Supabase from pausing the project
+const SIX_HOURS = 6 * 60 * 60 * 1000
+setInterval(async () => {
+  try {
+    console.log('[Database Keep-Alive] Running periodic database ping...')
+    await prisma.product.findFirst()
+    console.log('[Database Keep-Alive] Ping successful!')
+  } catch (error) {
+    console.error('[Database Keep-Alive Error] Periodic database ping failed:', error.message)
+  }
+}, SIX_HOURS)
+
 
 if (process.env.SENTRY_DSN) {
   Sentry.setupExpressErrorHandler(app)
