@@ -22,6 +22,8 @@ import { securityHeaders } from './middleware/securityHeaders.js'
 dotenv.config()
 
 const app = express()
+app.set('trust proxy', 1)
+
 
 const isAllowedOrigin = (origin) => {
   if (!origin) return true
