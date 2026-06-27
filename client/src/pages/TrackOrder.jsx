@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { CheckCircle, Clock, Truck, Package, ShoppingBag, ArrowLeft, MessageCircle } from 'lucide-react'
 import api from '../lib/api'
+import { loadFlutterwaveScript } from '../lib/flutterwave'
 import { formatPrice } from '../utils/formatPrice'
 import styles from './TrackOrder.module.css'
 
@@ -11,6 +12,8 @@ export default function TrackOrder() {
   const [error, setError] = useState(null)
   const [isConfirming, setIsConfirming] = useState(false)
   const [showNoFlow, setShowNoFlow] = useState(false)
+  const [isRetryingPayment, setIsRetryingPayment] = useState(false)
+  const [isBannerDismissed, setIsBannerDismissed] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -70,6 +73,47 @@ export default function TrackOrder() {
     }
   }
 
+  async function handleRetryPayment() {
+    if (!order) return
+    setIsRetryingPayment(true)
+    try {
+      const FlutterwaveCheckout = await loadFlutterwaveScript()
+      if (FlutterwaveCheckout) {
+        window.FlutterwaveCheckout({
+          public_key: import.meta.env.VITE_FLW_PUBLIC_KEY,
+          tx_ref: order.flutterwaveTxRef,
+          amount: order.totalAmount / 100,
+          currency: 'NGN',
+          payment_options: 'card,ussd,banktransfer',
+          customer: {
+            email: order.deliveryDetails?.email,
+            phone_number: order.deliveryDetails?.phone,
+            name: order.deliveryDetails?.fullName,
+          },
+          customizations: {
+            title: 'Shukky Shoes & More',
+            description: `Payment for order #${order.id.slice(-6).toUpperCase()}`,
+            logo: 'https://shukkyshoes.com/logo.png',
+          },
+          callback: (payment) => {
+            console.log('Payment retry complete', payment)
+            const txId = payment.transaction_id || payment.id || ''
+            navigate(`/order-confirmation/${order.id}?status=successful&transaction_id=${txId}`)
+          },
+          onclose: () => {
+            console.log('Payment retry closed')
+            setIsRetryingPayment(false)
+          },
+        })
+      } else {
+        throw new Error('Could not load payment widget')
+      }
+    } catch (err) {
+      setError(err.message || 'Failed to initialize payment retry')
+      setIsRetryingPayment(false)
+    }
+  }
+
   const getStatusInfo = (order) => {
     if (order.fulfillmentStatus === 'SHIPPED') {
       return {
@@ -85,6 +129,14 @@ export default function TrackOrder() {
         icon: <Package size={48} />,
         class: 'statusProcessing',
         message: 'Shukky is packaging your items right now!',
+      }
+    }
+    if (order.paymentStatus === 'FAILED') {
+      return {
+        label: 'Payment Failed',
+        icon: <Clock size={48} />,
+        class: 'statusPending',
+        message: 'Shukky Shoes indicated that payment was not received for this order.',
       }
     }
     if (order.paymentStatus === 'SUCCESS') {
@@ -151,6 +203,33 @@ export default function TrackOrder() {
 
   return (
     <div className="container" style={{ paddingBottom: 'var(--space-16)', paddingTop: 'var(--space-8)' }}>
+      {order.paymentStatus === 'FAILED' && !isBannerDismissed && (
+        <div className={styles.paymentFailedBanner}>
+          <div className={styles.bannerContent}>
+            <span className={styles.warningIcon}>⚠️</span>
+            <div className={styles.bannerText}>
+              <strong>Payment Not Received:</strong> Shukky Shoes indicated that payment was not received for this order. Please try making the payment again.
+            </div>
+          </div>
+          <div className={styles.bannerActions}>
+            <button
+              onClick={handleRetryPayment}
+              disabled={isRetryingPayment}
+              className={styles.retryPaymentBtn}
+            >
+              {isRetryingPayment ? 'Loading...' : 'Try Payment Again'}
+            </button>
+            <button
+              onClick={() => setIsBannerDismissed(true)}
+              className={styles.closeBannerBtn}
+              aria-label="Dismiss banner"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
       <Link to="/cart" className={styles.backLink}>
         <ArrowLeft size={18} /> Back to Cart
       </Link>
