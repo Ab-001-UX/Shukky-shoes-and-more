@@ -89,7 +89,7 @@ router.post('/login', authLimiter, async (req, res) => {
     const user = await prisma.user.findUnique({ where: { email: email.toLowerCase().trim() } })
     if (!user) {
       console.log('[Login] Account not found: %s', sanitizeLogInput(email))
-      return res.status(401).json({ success: false, message: 'Incorrect email' })
+      return res.status(401).json({ success: false, message: 'User does not exist' })
     }
 
     console.log('[Login] User found: %s, comparing password...', sanitizeLogInput(user.email))
