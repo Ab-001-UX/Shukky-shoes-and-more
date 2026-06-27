@@ -1,5 +1,19 @@
 {
+  "crons": [
+    {
+      "path": "/api/cron/ping",
+      "schedule": "0 0 * * *"
+    }
+  ],
   "rewrites": [
+    {
+      "source": "/api/cron/ping",
+      "destination": "https://shukky-shoes-and-more.onrender.com/api/cron/ping"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://shukky-shoes-and-more.onrender.com/api/:path*"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
