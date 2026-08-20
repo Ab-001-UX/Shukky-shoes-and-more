@@ -1,4 +1,4 @@
-.stateWrapper {
+the lin.stateWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,7 +18,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .stateMessage {
@@ -95,10 +97,21 @@
   color: inherit;
 }
 
-.statusConfirmed .statusIcon { color: var(--color-success); }
-.statusSentOut .statusIcon { color: #1976D2; }
-.statusProcessing .statusIcon { color: #F9A825; }
-.statusPending .statusIcon { color: #F57C00; }
+.statusConfirmed .statusIcon {
+  color: var(--color-success);
+}
+
+.statusSentOut .statusIcon {
+  color: #1976D2;
+}
+
+.statusProcessing .statusIcon {
+  color: #F9A825;
+}
+
+.statusPending .statusIcon {
+  color: #F57C00;
+}
 
 .statusLabel {
   font-family: var(--font-heading);

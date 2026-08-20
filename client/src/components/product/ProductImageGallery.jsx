@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { formatImageUrl } from '../../utils/formatImageUrl'
 import styles from './ProductImageGallery.module.css'
 
 export default function ProductImageGallery({ images, name }) {
@@ -7,16 +8,22 @@ export default function ProductImageGallery({ images, name }) {
   if (!images || images.length === 0) {
     return (
       <div className={styles.emptyGallery}>
-        <p>No images available</p>
+        <img
+          src={formatImageUrl(null, 800)}
+          alt={name || 'No image'}
+          className={styles.mainImage}
+        />
       </div>
     )
   }
+
+  const mainImageUrl = formatImageUrl(images[activeIndex], 800)
 
   return (
     <div className={styles.gallery}>
       <div className={styles.mainImageContainer}>
         <img
-          src={`${images[activeIndex]}?w=800&q=auto&f=auto`}
+          src={mainImageUrl}
           alt={`${name} - Image ${activeIndex + 1}`}
           className={styles.mainImage}
         />
@@ -31,7 +38,7 @@ export default function ProductImageGallery({ images, name }) {
               className={`${styles.thumbnailButton} ${index === activeIndex ? styles.active : ''}`}
             >
               <img
-                src={`${img}?w=150&q=auto&f=auto`}
+                src={formatImageUrl(img, 150)}
                 alt={`Thumbnail ${index + 1}`}
                 className={styles.thumbnailImage}
               />

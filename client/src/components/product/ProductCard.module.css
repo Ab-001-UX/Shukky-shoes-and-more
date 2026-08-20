@@ -75,6 +75,18 @@
   font-size: var(--text-base);
 }
 
+.descriptionPreview {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  margin-top: var(--space-1);
+  margin-bottom: var(--space-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
 .cartIconOverlay {
   position: absolute;
   top: var(--space-2);

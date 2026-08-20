@@ -206,6 +206,7 @@
 .description p {
   color: var(--color-muted);
   line-height: 1.6;
+  white-space: pre-line;
 }
 
 .policySummary {

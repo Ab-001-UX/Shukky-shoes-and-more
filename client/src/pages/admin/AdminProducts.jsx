@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Plus, ChevronDown } from 'lucide-react'
 import api from '../../lib/api'
 import { formatPrice } from '../../utils/formatPrice'
+import { formatImageUrl } from '../../utils/formatImageUrl'
 import ProductForm from '../../components/admin/ProductForm'
 import DeleteProductModal from '../../components/admin/DeleteProductModal'
 import styles from './Admin.module.css'
@@ -16,7 +17,7 @@ export default function AdminProducts() {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await api.get('/admin/inventory')
+      const { data } = await api.get('/admin/products')
       setProducts(data.data.filter(p => p.status !== 'ARCHIVED'))
     } catch (err) {
       console.error('Failed to fetch products', err)
@@ -82,15 +83,11 @@ export default function AdminProducts() {
             {products.map(product => (
               <tr key={product.id}>
                 <td>
-                  {product.images && product.images.length > 0 ? (
-                    <img 
-                      src={`${product.images[0]}?w=50&q=auto&f=auto`} 
-                      alt={product.name} 
-                      style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
-                    />
-                  ) : (
-                    <div style={{ width: '40px', height: '40px', backgroundColor: 'var(--color-border)', borderRadius: '4px' }} />
-                  )}
+                  <img 
+                    src={formatImageUrl(product.images?.[0], 50)} 
+                    alt={product.name} 
+                    style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
+                  />
                 </td>
                 <td>{product.name}</td>
                 <td>{formatPrice(product.price)}</td>

@@ -1,0 +1,15 @@
+name: Keep Supabase & Backend Alive
+
+on:
+  schedule:
+    # Runs every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Backend & Supabase
+        run: |
+          curl -s -f https://shukky-shoes-and-more.onrender.com/api/cron/ping || echo "Ping failed or backend sleeping"

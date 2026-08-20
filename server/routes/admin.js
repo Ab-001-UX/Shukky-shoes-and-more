@@ -37,7 +37,7 @@ router.get('/cloudinary-signature', (req, res) => {
       return res.status(500).json({ success: false, message: 'Cloudinary not configured' })
     }
 
-    const signature = crypto.createHash('sha256').update(`timestamp=${timestamp}${apiSecret}`).digest('hex')
+    const signature = crypto.createHash('sha1').update(`timestamp=${timestamp}${apiSecret}`).digest('hex')
     
     res.json({ 
       success: true, 
@@ -103,6 +103,20 @@ router.patch('/orders/:id', async (req, res) => {
   } catch (error) {
     console.error('[AdminUpdateOrder]', error)
     return res.status(500).json({ success: false, message: 'Failed to update order' })
+  }
+})
+
+// GET all products with complete metadata for admin management
+router.get('/products', async (req, res) => {
+  try {
+    const products = await prisma.product.findMany({
+      where: { status: { not: 'ARCHIVED' } },
+      orderBy: { createdAt: 'desc' },
+    })
+    return res.json({ success: true, data: products })
+  } catch (error) {
+    console.error('[AdminGetProducts]', error)
+    return res.status(500).json({ success: false, message: 'Failed to fetch products' })
   }
 })
 

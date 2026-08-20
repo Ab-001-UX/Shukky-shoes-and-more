@@ -1,10 +1,19 @@
 import { useState } from 'react'
-import { Upload, X } from 'lucide-react'
+import { Upload, X, Link as LinkIcon, Plus } from 'lucide-react'
 import api from '../../lib/api'
+import { formatImageUrl } from '../../utils/formatImageUrl'
 import styles from './ImageUploader.module.css'
 
 export default function ImageUploader({ images, onChange }) {
   const [isUploading, setIsUploading] = useState(false)
+  const [urlInput, setUrlInput] = useState('')
+
+  const handleAddUrl = (e) => {
+    e.preventDefault()
+    if (!urlInput.trim()) return
+    onChange([...images, urlInput.trim()])
+    setUrlInput('')
+  }
 
   const handleUpload = async (e) => {
     const file = e.target.files[0]
@@ -30,10 +39,18 @@ export default function ImageUploader({ images, onChange }) {
       if (result.secure_url) {
         onChange([...images, result.secure_url])
       } else {
-        throw new Error('Failed to upload image')
+        throw new Error('Failed to upload image to Cloudinary')
       }
     } catch (err) {
-      alert(err.message || 'Error uploading image')
+      console.warn('Cloudinary upload failed/unconfigured, using local file reader fallback:', err.message)
+      // Fallback: read file as base64 Data URI so adding images always succeeds
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        if (event.target.result) {
+          onChange([...images, event.target.result])
+        }
+      }
+      reader.readAsDataURL(file)
     } finally {
       setIsUploading(false)
       e.target.value = null
@@ -49,7 +66,7 @@ export default function ImageUploader({ images, onChange }) {
       <div className={styles.previewGrid}>
         {images.map((img, idx) => (
           <div key={idx} className={styles.previewWrapper}>
-            <img src={`${img}?w=150&q=auto&f=auto`} alt={`Preview ${idx}`} className={styles.previewImage} />
+            <img src={formatImageUrl(img, 150)} alt={`Preview ${idx}`} className={styles.previewImage} />
             <button type="button" onClick={() => removeImage(idx)} className={styles.removeBtn}>
               <X size={14} />
             </button>
@@ -65,8 +82,24 @@ export default function ImageUploader({ images, onChange }) {
             style={{ display: 'none' }}
           />
           <Upload size={24} className={styles.uploadIcon} />
-          <span>{isUploading ? 'Uploading...' : 'Upload Image'}</span>
+          <span>{isUploading ? 'Uploading...' : 'Upload File'}</span>
         </label>
+      </div>
+
+      <div className={styles.urlForm}>
+        <div className={styles.urlInputGroup}>
+          <LinkIcon size={16} className={styles.urlIcon} />
+          <input
+            type="url"
+            placeholder="Or paste image URL (e.g. Unsplash, web link)"
+            value={urlInput}
+            onChange={(e) => setUrlInput(e.target.value)}
+            className={styles.urlInput}
+          />
+          <button type="button" onClick={handleAddUrl} className={styles.urlAddBtn}>
+            <Plus size={16} /> Add URL
+          </button>
+        </div>
       </div>
     </div>
   )

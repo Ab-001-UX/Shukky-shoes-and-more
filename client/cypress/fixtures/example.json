@@ -1,0 +1,25 @@
+{
+  "buyer": {
+    "email": "buyer@shukkyshoes.com",
+    "password": "Password123"
+  },
+  "admin": {
+    "email": "admin@shukkyshoes.com",
+    "password": "AdminPassword123"
+  },
+  "product": {
+    "name": "Luxury Leather Loafers",
+    "price": 12000000,
+    "description": "Elegant premium Italian calfskin leather loafers, hand-stitched for style and comfort."
+  },
+  "checkoutDetails": {
+    "fullName": "Monsurat Adetomiwa",
+    "email": "monsurat@example.com",
+    "phone": "08012345678",
+    "method": "RIDER",
+    "address": "12 Balogun Street, Island",
+    "city": "Lagos",
+    "state": "Lagos",
+    "notes": "Call before arrival"
+  }
+}
